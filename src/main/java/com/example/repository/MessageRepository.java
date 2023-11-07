@@ -13,5 +13,5 @@ public interface MessageRepository extends JpaRepository<Message, Integer> {
 
     // This method retrieves all messages written by a specified user.
     @Query("FROM Message WHERE posted_by = :user")
-    List<Message> getMessagesByUser(@Param("user") String user);
+    List<Message> getMessagesByUser(@Param("user") Integer user);
 }

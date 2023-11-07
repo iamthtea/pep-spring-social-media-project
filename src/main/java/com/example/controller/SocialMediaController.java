@@ -70,4 +70,32 @@ public class SocialMediaController {
     public Message getMessageById(@PathVariable("message_id") Integer id) {
         return messageService.getMessageById(id);
     }
+
+    // Updates a message given its id and replacement text
+    @PatchMapping("/messages/{message_id}")
+    public ResponseEntity<String> updateMessage(@PathVariable("message_id") Integer id, @RequestBody Message message){
+        if (messageService.getMessageById(id) != null) {
+            Message updatedMessage = messageService.updateMessage(id, message);
+            if (updatedMessage != null){
+                return new ResponseEntity<String>("1", HttpStatus.OK);
+            }
+        }
+        return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+    }
+
+    // Deletes a message given its id
+    @DeleteMapping("/messages/{message_id}")
+    public ResponseEntity<String> deleteMessage(@PathVariable("message_id") Integer id){
+        if (messageService.getMessageById(id) != null){
+            messageService.deleteMessage(id);
+            return new ResponseEntity<String>("1", HttpStatus.OK);
+        }
+        return null;
+    }
+
+    // Get all messages by a specific user given user id
+    @GetMapping("/accounts/{account_id}/messages")
+    public List<Message> getMessagesByUser(@PathVariable("account_id") Integer userId){
+        return messageService.getMessagesByPoster(userId);
+    }
 }

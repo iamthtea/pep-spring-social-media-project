@@ -38,6 +38,30 @@ public class MessageService {
 
     // Get a message by id
     public Message getMessageById(Integer id) {
-        return messageRepository.getById(id);
+        return messageRepository.findById(id).orElse(null);
+    }
+
+    // Get all messages by a given user
+    public List<Message> getMessagesByPoster(Integer userId){
+        return messageRepository.getMessagesByUser(userId);
+    }
+
+    // Update a message given its id
+    public Message updateMessage(Integer id, Message message) {
+        Optional<Message> optionalMessage = messageRepository.findById(id);
+        if (optionalMessage.isPresent()) {
+            String text = message.getMessage_text();
+            if (text.length() > 0 && text.length() < 255) {
+                Message match = optionalMessage.get();
+                match.setMessage_text(text);
+                return messageRepository.save(match);
+            }
+        }
+        return null;
+    }
+
+    // Delete a message given its id
+    public void deleteMessage(Integer id){
+        messageRepository.deleteById(id);
     }
 }
